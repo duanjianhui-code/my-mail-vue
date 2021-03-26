@@ -33,6 +33,7 @@ import BockTop from "@/components/content/backTop/BockTop";
 
 
 import {getHomeMultidata, getHomeGoods} from "@/network/home";
+import {debounce,throttle} from "@/common/utils";
 
 
 export default {
@@ -67,6 +68,14 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+
+  },
+  mounted() {
+    // 1.图片加载完成的事件监听
+    const refresh = debounce(this.$refs.scroll.refresh,50)
+    this.$bus.$on('itemImageLoad', () => {
+      refresh()
+    })
   },
   methods: {
     /**
@@ -94,7 +103,6 @@ export default {
     },
     pullingUp() {
       this.getHomeGoods(this.currentType)
-      this.$refs.scroll.refresh()
     },
 
     /**
